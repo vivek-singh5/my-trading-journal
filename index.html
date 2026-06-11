@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ZBTradeDesk</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<title>Lucid</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -40,7 +40,7 @@
   --glow-accent:rgba(79,142,247,0.18);
   --glow-cyan:rgba(0,212,255,0.12);
 
-  --font:'Space Grotesk',sans-serif;
+  --font: Calibri, 'Segoe UI', sans-serif;
   --mono:'JetBrains Mono',monospace;
   --r:8px;--r2:14px;--r3:20px;
   --ease:cubic-bezier(0.16,1,0.3,1);
@@ -99,53 +99,6 @@ body::after{
   pointer-events:none;
   z-index:0;
   opacity:0.4;
-}
-
-/* ═══════════════════════════════════════════════════════
-   TICKER TAPE
-═══════════════════════════════════════════════════════ */
-.ticker-wrap{
-  position:relative;
-  z-index:10;
-  height:28px;
-  background:var(--glass);
-  border-bottom:1px solid var(--rim);
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-}
-.ticker-tape{
-  display:flex;
-  gap:0;
-  animation:tickerScroll 40s linear infinite;
-  white-space:nowrap;
-  will-change:transform;
-}
-.ticker-item{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:0 24px;
-  font-family:var(--mono);
-  font-size:9px;
-  font-weight:600;
-  letter-spacing:0.06em;
-  border-right:1px solid var(--rim);
-  color:var(--text2);
-}
-.ticker-item .t-sym{color:var(--text);font-weight:700;}
-.ticker-item .t-up{color:var(--green);}
-.ticker-item .t-dn{color:var(--red);}
-.ticker-divider{
-  height:28px;
-  width:1px;
-  background:var(--rim);
-  flex-shrink:0;
-}
-
-@keyframes tickerScroll{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -461,10 +414,10 @@ header{
   letter-spacing:0.12em;
 }
 .kpi-val{
-  font-size:22px;
+  font-size:17px; /* reduced from 22px to fit better */
   font-weight:700;
   letter-spacing:-0.5px;
-  line-height:1.1;
+  line-height:1.2;
   font-family:var(--mono);
   position:relative;
   z-index:1;
@@ -888,7 +841,7 @@ select:focus,input:focus{
   padding:9px 12px;
   background:var(--surface);
   border-radius:8px;
-  font-family:var(--mono);font-size:11px;
+  font-family:var(--mono);font-size:10px; /* reduced for fit */
   border-left:3px solid;
   transition:transform .15s var(--ease),background .15s;
   animation:hofIn .4s var(--ease) both;
@@ -906,7 +859,7 @@ select:focus,input:focus{
 .bench-row{
   display:flex;align-items:center;justify-content:space-between;
   padding:8px 0;border-bottom:1px solid rgba(26,40,64,0.6);
-  font-family:var(--mono);font-size:11px;
+  font-family:var(--mono);font-size:10px; /* reduced for fit */
 }
 .bench-row:last-child{border-bottom:none;}
 
@@ -944,11 +897,11 @@ select:focus,input:focus{
 }
 .calc-box:hover{border-color:var(--rim2);transform:translateY(-2px);}
 .calc-box h4{
-  color:var(--accent);font-size:11px;
+  color:var(--accent);font-size:10px; /* reduced for fit */
   margin-bottom:16px;font-family:var(--mono);
   font-weight:700;letter-spacing:0.06em;
 }
-.calc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;font-size:12px;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;font-size:11px;} /* reduced for fit */
 .calc-row span{color:var(--text2);white-space:nowrap;font-family:var(--mono);}
 .calc-row input,.calc-row select{width:140px;}
 .calc-result{
@@ -1037,20 +990,13 @@ canvas{display:block;}
 </head>
 <body data-theme="dark">
 
-<!-- TICKER TAPE -->
-<div class="ticker-wrap" id="tickerWrap">
-  <div class="ticker-tape" id="tickerTape">
-    <!-- filled by JS -->
-  </div>
-</div>
-
 <div class="app">
 
 <header>
   <div class="logo">
     <div class="logo-icon">💠</div>
     <div>
-      <div class="logo-name">ZBTradeDesk</div>
+      <div class="logo-name">Lucid</div>
       <div class="logo-sub">Personal Trading Journal</div>
     </div>
   </div>
@@ -1070,19 +1016,15 @@ canvas{display:block;}
   <span id="streakAlertMsg"></span>
 </div>
 
-<!-- TABS -->
 <div class="tabs" id="tabBar">
   <div class="tab-slider" id="tabSlider"></div>
-  <div class="tab active" data-tab="overview"   onclick="switchTab('overview')">OVERVIEW</div>
-  <div class="tab"        data-tab="analytics"  onclick="switchTab('analytics')">DEEP ANALYTICS</div>
-  <div class="tab"        data-tab="calendar"   onclick="switchTab('calendar')">P&L CALENDAR</div>
+  <div class="tab active" data-tab="overview"  onclick="switchTab('overview')">OVERVIEW</div>
+  <div class="tab"        data-tab="analytics" onclick="switchTab('analytics')">DEEP ANALYTICS</div>
+  <div class="tab"        data-tab="calendar"  onclick="switchTab('calendar')">P&L CALENDAR</div>
   <div class="tab"        data-tab="calculators" onclick="switchTab('calculators')">CALCULATORS</div>
-  <div class="tab"        data-tab="history"    onclick="switchTab('history')">TRADE HISTORY</div>
+  <div class="tab"        data-tab="history"   onclick="switchTab('history')">TRADE HISTORY</div>
 </div>
 
-<!-- ╔══════════════════════════════════════╗
-     ║         OVERVIEW TAB                 ║
-     ╚══════════════════════════════════════╝ -->
 <div class="tab-panel active" id="tab-overview">
 
   <div class="slabel"><div class="slabel-line"></div>Active Portfolio</div>
@@ -1219,9 +1161,6 @@ canvas{display:block;}
   </div>
 </div>
 
-<!-- ╔══════════════════════════════════════╗
-     ║         ANALYTICS TAB               ║
-     ╚══════════════════════════════════════╝ -->
 <div class="tab-panel" id="tab-analytics">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
     <div class="slabel" style="margin:0;"><div class="slabel-line"></div>Analytics Filter</div>
@@ -1329,9 +1268,6 @@ canvas{display:block;}
   </div>
 </div>
 
-<!-- ╔══════════════════════════════════════╗
-     ║       P&L CALENDAR TAB              ║
-     ╚══════════════════════════════════════╝ -->
 <div class="tab-panel" id="tab-calendar">
   <div class="slabel"><div class="slabel-line"></div>P&L Calendar</div>
   <div class="calendar-layout">
@@ -1359,9 +1295,6 @@ canvas{display:block;}
   </div>
 </div>
 
-<!-- ╔══════════════════════════════════════╗
-     ║       CALCULATORS TAB               ║
-     ╚══════════════════════════════════════╝ -->
 <div class="tab-panel" id="tab-calculators">
   <div class="slabel"><div class="slabel-line"></div>Trading Calculators</div>
   <div class="calc-grid">
@@ -1394,9 +1327,6 @@ canvas{display:block;}
   </div>
 </div>
 
-<!-- ╔══════════════════════════════════════╗
-     ║       TRADE HISTORY TAB             ║
-     ╚══════════════════════════════════════╝ -->
 <div class="tab-panel" id="tab-history">
   <div class="table-wrap">
     <div class="table-toolbar">
@@ -1424,38 +1354,9 @@ canvas{display:block;}
   </div>
 </div>
 
-</div><!-- /app -->
-
-<div class="hm-tooltip" id="hmTooltip"></div>
+</div><div class="hm-tooltip" id="hmTooltip"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   TICKER TAPE — ambient market data (static flavour)
-═══════════════════════════════════════════════════════ */
-const TICKER_ITEMS = [
-  {sym:'NIFTY 50',    val:'24,628',  chg:'+0.42%', up:true},
-  {sym:'BANKNIFTY',   val:'52,841',  chg:'-0.18%', up:false},
-  {sym:'NIFTYMIDCAP', val:'11,204',  chg:'+0.61%', up:true},
-  {sym:'SENSEX',      val:'81,204',  chg:'+0.38%', up:true},
-  {sym:'USD/INR',     val:'₹83.47',  chg:'+0.02%', up:true},
-  {sym:'GOLD',        val:'₹72,140', chg:'-0.12%', up:false},
-  {sym:'VIX',         val:'13.42',   chg:'+1.8%',  up:false},
-  {sym:'NIFTYIT',     val:'34,812',  chg:'+1.2%',  up:true},
-  {sym:'NIFTYPHARMA', val:'18,440',  chg:'-0.3%',  up:false},
-  {sym:'CRUDE OIL',   val:'$83.12',  chg:'+0.7%',  up:true},
-];
-function buildTicker(){
-  const tape = document.getElementById('tickerTape');
-  // Duplicate for seamless loop
-  const doubled = [...TICKER_ITEMS,...TICKER_ITEMS,...TICKER_ITEMS];
-  tape.innerHTML = doubled.map(t=>`<div class="ticker-item">
-    <span class="t-sym">${t.sym}</span>
-    <span>${t.val}</span>
-    <span class="${t.up?'t-up':'t-dn'}">${t.chg}</span>
-  </div>`).join('');
-}
-buildTicker();
-
 /* ═══════════════════════════════════════════════════════
    BUTTON RIPPLE
 ═══════════════════════════════════════════════════════ */
@@ -1766,8 +1667,8 @@ function updatePortfolioKPIs(){
     {label:'% Invested',       val:pctInvested.toFixed(1)+'%',                 cls:pctInvested>80?'neg':pctInvested>50?'neu':'pos'},
     {label:'Capital Deployed', val:'₹'+(deployed/1e5).toFixed(2)+'L',          cls:''},
     {label:'MTM P&L (Sheet)',  val:formatINR(mtm),                             cls:mtm>=0?'pos':'neg'},
-    {label:'Max SL Risk',      val:formatINR(maxRisk),                          cls:'neg'},
-    {label:'SL Breaches',      val:slBreaches,                                  cls:slBreaches>0?'neg':'pos'},
+    {label:'Max SL Risk',      val:formatINR(maxRisk),                         cls:'neg'},
+    {label:'SL Breaches',      val:slBreaches,                                 cls:slBreaches>0?'neg':'pos'},
   ].map(k=>`<div class="kpi">
     <div class="kpi-label">${k.label}</div>
     <div class="kpi-val ${k.cls}">${k.val}</div>
@@ -1886,7 +1787,7 @@ function renderPerformanceKPIs(){
   pnls.forEach(p=>{run+=p;if(run>peak)peak=run;const dd=peak-run;if(dd>maxDD)maxDD=dd;});
 
   document.getElementById('kpi-performance').innerHTML=[
-    {label:'Total P&L',     val:formatINR(totalPnl),        sub2:'',                             cls:totalPnl>=0?'pos':'neg'},
+    {label:'Total P&L',     val:formatINR(totalPnl),        sub2:'',                               cls:totalPnl>=0?'pos':'neg'},
     {label:'Win Rate',      val:wr.toFixed(1)+'%',           sub2:`${wins.length}W / ${losses.length}L`,cls:wr>=50?'pos':'neg'},
     {label:'Profit Factor', val:pf.toFixed(2)+'x',           sub2:'gross win ÷ gross loss',         cls:pf>=1.5?'pos':pf>=1?'neu':'neg'},
     {label:'Avg Win',       val:'+'+avgWPct.toFixed(2)+'%',  sub2:formatINR(avgWAbs),               cls:'pos'},
@@ -2623,7 +2524,7 @@ function exportCSV(){
   const hdr=['Symbol','Setup','Entry Date','Exit Date','Days','Entry','Exit','Qty','PnL','PctMove','RR','Outcome'];
   const rows=closed.map(t=>[t.Symbol,t.Setup,t['Entry Date'],t['Exit Date'],daysBetween(parseSheetDate(t['Entry Date']),parseSheetDate(t['Exit Date'])),n(t.Entry),calcExitPrice(t),n(t.QE),calcPnL(t).toFixed(2),calcPctMove(t).toFixed(2),calcRR(t).toFixed(2),calcPnL(t)>0?'WIN':'LOSS'].join(','));
   const blob=new Blob([[hdr.join(','),...rows].join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ZBTradeDesk.csv';a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Lucid.csv';a.click();
 }
 
 /* ═══════════════════════════════════════════════════════
