@@ -158,7 +158,7 @@ body::before{
     radial-gradient(ellipse 80% 40% at 50% 100%,rgba(31,184,138,0.04),transparent);
 }
 
-/* Subtle noise texture overlay - optimized for performance (removed mix-blend-mode) */
+/* Subtle noise texture overlay */
 body::after{
   content:'';
   position:fixed;
@@ -260,7 +260,7 @@ header::before{
 .nav-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1;}
 
 /* ═══════════════════════════════════════════════════════
-   BUTTONS — OPTIMIZED (Removed nested blurs)
+   BUTTONS
 ═══════════════════════════════════════════════════════ */
 .btn{
   position:relative;
@@ -271,7 +271,7 @@ header::before{
   font-size:10px;
   font-weight:600;
   border:1px solid var(--glass-border);
-  background:rgba(255, 255, 255, 0.45); /* optimized opacity */
+  background:rgba(255, 255, 255, 0.45); 
   color:var(--text2);
   transition:all .25s var(--ease);
   letter-spacing:0.06em;
@@ -1160,7 +1160,7 @@ canvas{display:block;}
 }
 
 /* ═══════════════════════════════════════════════════════
-   ADD TRADE MODAL
+   ADD / EDIT TRADE MODAL
 ═══════════════════════════════════════════════════════ */
 .modal-overlay {
   display: none; position: fixed; inset: 0; z-index: 2000;
@@ -1555,28 +1555,53 @@ canvas{display:block;}
 </div>
 
 <div class="modal-overlay" id="addTradeModal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-width: 500px; max-height: 90vh; overflow-y: auto;">
     <span class="modal-close" onclick="closeAddModal()">×</span>
-    <div class="slabel" style="margin-top:0;"><div class="slabel-line"></div>Log New Trade</div>
+    <div class="slabel" style="margin-top:0;"><div class="slabel-line"></div><span id="modalTitle">Log New Trade</span></div>
     
-    <div style="display:flex; flex-direction:column; gap:12px; margin-top:16px;">
-      <div class="calc-row"><span>Symbol</span><input type="text" id="newSymbol" placeholder="e.g. RELIANCE" style="width:140px;"/></div>
+    <input type="hidden" id="modalMode" value="add"/>
+    <input type="hidden" id="editOriginalEntryDate" value=""/>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+      <div class="calc-row" style="grid-column: 1 / -1;"><span>Symbol</span><input type="text" id="newSymbol" placeholder="e.g. CPPLUS" style="width:100%; max-width:200px;"/></div>
       <div class="calc-row"><span>Setup</span>
-        <select id="newSetup" style="width:140px;">
+        <select id="newSetup" style="width:120px;">
           <option value="VCP">VCP</option>
           <option value="Pullback">Pullback</option>
           <option value="Breakout">Breakout</option>
         </select>
       </div>
-      <div class="calc-row"><span>Entry Date</span><input type="date" id="newEntryDate" style="width:140px;"/></div>
-      <div class="calc-row"><span>Entry Price</span><input type="number" id="newEntryPrice" style="width:140px;"/></div>
-      <div class="calc-row"><span>Initial SL</span><input type="number" id="newInitialSL" style="width:140px;"/></div>
-      <div class="calc-row"><span>Quantity (QE)</span><input type="number" id="newQty" style="width:140px;"/></div>
-      <div class="calc-row"><span>Low (Post-Entry)</span><input type="number" id="newLow" placeholder="Optional" style="width:140px;"/></div>
-      <div class="calc-row"><span>High (Post-Entry)</span><input type="number" id="newHigh" placeholder="Optional" style="width:140px;"/></div>
+      <div class="calc-row"><span>Status</span>
+        <select id="newStatus" style="width:120px;">
+          <option value="Open">Open</option>
+          <option value="Win">Win</option>
+          <option value="Loss">Loss</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+      <div class="calc-row"><span>Entry Date</span><input type="date" id="newEntryDate" style="width:120px;"/></div>
+      <div class="calc-row"><span>Exit Date</span><input type="date" id="newExitDate" style="width:120px;"/></div>
+      <div class="calc-row"><span>Entry Price</span><input type="number" id="newEntryPrice" style="width:120px;"/></div>
+      <div class="calc-row"><span>Initial SL</span><input type="number" id="newInitialSL" style="width:120px;"/></div>
+      <div class="calc-row"><span>Quantity (QE)</span><input type="number" id="newQty" style="width:120px;"/></div>
+      <div class="calc-row"><span>Trailing SL</span><input type="number" id="newTrailSL" style="width:120px;"/></div>
       
-      <button class="btn btn-accent" id="submitBtn" onclick="submitNewTrade()" style="margin-top:12px; padding:12px; font-size:12px;">SUBMIT TRADE</button>
+      <div style="grid-column: 1 / -1; height: 1px; background: var(--rim); margin: 8px 0;"></div>
+      
+      <div class="calc-row"><span>Exit 1 Qty</span><input type="number" id="newQX1" style="width:100px;"/></div>
+      <div class="calc-row"><span>Exit 1 Price</span><input type="number" id="newX1" style="width:100px;"/></div>
+      <div class="calc-row"><span>Exit 2 Qty</span><input type="number" id="newQX2" style="width:100px;"/></div>
+      <div class="calc-row"><span>Exit 2 Price</span><input type="number" id="newX2" style="width:100px;"/></div>
+      <div class="calc-row"><span>Exit 3 Qty</span><input type="number" id="newQX3" style="width:100px;"/></div>
+      <div class="calc-row"><span>Exit 3 Price</span><input type="number" id="newX3" style="width:100px;"/></div>
+
+      <div style="grid-column: 1 / -1; height: 1px; background: var(--rim); margin: 8px 0;"></div>
+
+      <div class="calc-row"><span>Low (Post-Entry)</span><input type="number" id="newLow" style="width:120px;"/></div>
+      <div class="calc-row"><span>High (Post-Entry)</span><input type="number" id="newHigh" style="width:120px;"/></div>
     </div>
+    
+    <button class="btn btn-accent" id="submitBtn" onclick="submitNewTrade()" style="margin-top:16px; width:100%; padding:12px; font-size:12px;">SUBMIT TRADE</button>
   </div>
 </div>
 
@@ -1584,13 +1609,72 @@ canvas{display:block;}
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   WRITE TO GOOGLE SHEETS API
+   WRITE & EDIT GOOGLE SHEETS API
 ═══════════════════════════════════════════════════════ */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_7rCeO6Y-BPRegXuIUPRAvkwhgJRONxlg_RBwV8Spn40QoWJZUgVsuS4E97efugf5Tg/exec";
 
+// Helper to convert HTML YYYY-MM-DD to Sheet MM/DD/YYYY
+function formatDateForSheet(dateString) {
+  if (!dateString) return "";
+  const parts = dateString.split('-');
+  if (parts.length !== 3) return dateString;
+  return `${parts[1]}/${parts[2]}/${parts[0]}`;
+}
+
+// Helper to convert Sheet MM/DD/YYYY to HTML YYYY-MM-DD for editing
+function parseDateForInput(dateString) {
+  if (!dateString) return "";
+  const d = new Date(dateString);
+  if (isNaN(d)) return "";
+  return d.toISOString().split('T')[0];
+}
+
 function openAddModal() {
-  document.getElementById('addTradeModal').classList.add('open');
+  document.getElementById('modalMode').value = "add";
+  document.getElementById('modalTitle').textContent = "Log New Trade";
+  document.getElementById('submitBtn').textContent = "ADD TRADE";
+  
+  // Clear all fields
+  document.querySelectorAll('#addTradeModal input').forEach(inp => inp.value = '');
   document.getElementById('newEntryDate').valueAsDate = new Date();
+  document.getElementById('newStatus').value = "Open";
+  
+  document.getElementById('addTradeModal').classList.add('open');
+}
+
+function openEditModal(symbol, entryDateStr) {
+  const trade = getOpen().find(t => t.Symbol === symbol && t['Entry Date'] === entryDateStr);
+  if (!trade) return;
+
+  document.getElementById('modalMode').value = "update";
+  document.getElementById('modalTitle').textContent = "Edit Trade: " + symbol;
+  document.getElementById('submitBtn').textContent = "UPDATE TRADE";
+  
+  // Store original identifiers so the script can find the row
+  document.getElementById('editOriginalEntryDate').value = entryDateStr;
+
+  // Populate fields
+  document.getElementById('newSymbol').value = trade.Symbol || "";
+  document.getElementById('newSetup').value = trade.Setup || "VCP";
+  document.getElementById('newStatus').value = trade.Status || "Open";
+  document.getElementById('newEntryDate').value = parseDateForInput(trade['Entry Date']);
+  document.getElementById('newExitDate').value = parseDateForInput(trade['Exit Date']);
+  document.getElementById('newEntryPrice').value = n(trade.Entry) || "";
+  document.getElementById('newInitialSL').value = n(trade['Initial SL']) || "";
+  document.getElementById('newTrailSL').value = n(trade['Trailing SL']) || "";
+  document.getElementById('newQty').value = n(trade.QE) || "";
+  
+  document.getElementById('newQX1').value = n(trade.QX1) || "";
+  document.getElementById('newX1').value = n(trade.X1) || "";
+  document.getElementById('newQX2').value = n(trade.QX2) || "";
+  document.getElementById('newX2').value = n(trade.X2) || "";
+  document.getElementById('newQX3').value = n(trade.QX3) || "";
+  document.getElementById('newX3').value = n(trade.X3) || "";
+  
+  document.getElementById('newLow').value = n(trade.Low) || "";
+  document.getElementById('newHigh').value = n(trade.High) || "";
+
+  document.getElementById('addTradeModal').classList.add('open');
 }
 
 function closeAddModal() {
@@ -1599,38 +1683,46 @@ function closeAddModal() {
 
 async function submitNewTrade() {
   const btn = document.getElementById('submitBtn');
-  btn.textContent = "SENDING...";
+  const mode = document.getElementById('modalMode').value;
+  btn.textContent = "SAVING...";
   btn.style.opacity = "0.7";
   btn.style.pointerEvents = "none";
 
+  // Build the trade object formatting dates to MM/DD/YYYY
   const tradeData = {
     "Symbol": document.getElementById('newSymbol').value.toUpperCase(),
     "Setup": document.getElementById('newSetup').value,
-    "Status": "Open",
-    "Entry Date": document.getElementById('newEntryDate').value,
-    "Exit Date": "",
-    "Entry": parseFloat(document.getElementById('newEntryPrice').value),
-    "Initial SL": parseFloat(document.getElementById('newInitialSL').value),
-    "Trailing SL": "",
-    "Position Size": "",
-    "QE": parseFloat(document.getElementById('newQty').value),
-    "CMP": "", 
-    "Day Chg": "",
-    "Latest day high": "",
-    "QX1": "", "X1": "",
-    "QX2": "", "X2": "",
-    "QX3": "", "X3": "",
+    "Status": document.getElementById('newStatus').value,
+    "Entry Date": formatDateForSheet(document.getElementById('newEntryDate').value),
+    "Exit Date": formatDateForSheet(document.getElementById('newExitDate').value),
+    "Entry": parseFloat(document.getElementById('newEntryPrice').value) || "",
+    "Initial SL": parseFloat(document.getElementById('newInitialSL').value) || "",
+    "Trailing SL": parseFloat(document.getElementById('newTrailSL').value) || "",
+    "QE": parseFloat(document.getElementById('newQty').value) || "",
+    "QX1": parseFloat(document.getElementById('newQX1').value) || "",
+    "X1": parseFloat(document.getElementById('newX1').value) || "",
+    "QX2": parseFloat(document.getElementById('newQX2').value) || "",
+    "X2": parseFloat(document.getElementById('newX2').value) || "",
+    "QX3": parseFloat(document.getElementById('newQX3').value) || "",
+    "X3": parseFloat(document.getElementById('newX3').value) || "",
     "Low": parseFloat(document.getElementById('newLow').value) || "",
-    "High": parseFloat(document.getElementById('newHigh').value) || "",
-    "MAE": "",
-    "MFE": "",
-    "ETD": ""
+    "High": parseFloat(document.getElementById('newHigh').value) || ""
+  };
+
+  // Build payload
+  const payload = {
+    action: mode,
+    identifier: {
+      "Symbol": tradeData.Symbol,
+      "Entry Date": document.getElementById('editOriginalEntryDate').value
+    },
+    trade: tradeData
   };
 
   try {
     const response = await fetch(APPS_SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify(tradeData),
+      body: JSON.stringify(payload),
       headers: { "Content-Type": "text/plain;charset=utf-8" }
     });
     
@@ -1638,22 +1730,15 @@ async function submitNewTrade() {
     
     if (result.status === "success") {
       closeAddModal();
-      document.getElementById('newSymbol').value = "";
-      document.getElementById('newEntryPrice').value = "";
-      document.getElementById('newInitialSL').value = "";
-      document.getElementById('newQty').value = "";
-      document.getElementById('newLow').value = "";
-      document.getElementById('newHigh').value = "";
-      
       loadData(); 
     } else {
-      alert("Error: " + result.message);
+      alert("Error: " + (result.message || "Unknown error"));
     }
   } catch (error) {
     console.error("Network Error:", error);
     alert("Failed to save. Check internet connection.");
   } finally {
-    btn.textContent = "SUBMIT TRADE";
+    btn.textContent = mode === "add" ? "ADD TRADE" : "UPDATE TRADE";
     btn.style.opacity = "1";
     btn.style.pointerEvents = "auto";
   }
@@ -2075,7 +2160,7 @@ function renderOpenPositions(){
     }
 
     return `<tr class="${rowCls}">
-      <td><b>${sym||'—'}</b>${symBadge}</td>
+      <td><span style="cursor:pointer; color:var(--accent); font-size:12px; margin-right:6px;" onclick="openEditModal('${sym}', '${t['Entry Date']}')">✏️</span><b>${sym||'—'}</b>${symBadge}</td>
       <td>${t.Setup||'—'}</td>
       <td>${t['Entry Date']||'—'}</td>
       <td>₹${entry.toFixed(2)}</td>
