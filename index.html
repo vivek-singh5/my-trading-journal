@@ -1560,6 +1560,7 @@ canvas{display:block;}
     <div class="slabel" style="margin-top:0;"><div class="slabel-line"></div><span id="modalTitle">Log New Trade</span></div>
     
     <input type="hidden" id="modalMode" value="add"/>
+    <input type="hidden" id="editOriginalSymbol" value=""/>
     <input type="hidden" id="editOriginalEntryDate" value=""/>
 
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
@@ -1651,6 +1652,7 @@ function openEditModal(symbol, entryDateStr) {
   document.getElementById('submitBtn').textContent = "UPDATE TRADE";
   
   // Store original identifiers so the script can find the row
+  document.getElementById('editOriginalSymbol').value = symbol;
   document.getElementById('editOriginalEntryDate').value = entryDateStr;
 
   // Populate fields
@@ -1713,7 +1715,7 @@ async function submitNewTrade() {
   const payload = {
     action: mode,
     identifier: {
-      "Symbol": tradeData.Symbol,
+      "Symbol": document.getElementById('editOriginalSymbol').value,
       "Entry Date": document.getElementById('editOriginalEntryDate').value
     },
     trade: tradeData
