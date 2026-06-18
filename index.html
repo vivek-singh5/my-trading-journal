@@ -51,7 +51,7 @@
   --r:10px;--r2:18px;--r3:26px;
   --ease:cubic-bezier(0.16,1,0.3,1);
 
-  --glass-blur:12px; /* Optimized from 20px for better performance */
+  --glass-blur:12px;
   --glass-border:rgba(255,255,255,0.65);
   --glass-shadow:0 8px 32px rgba(120,140,170,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
   --glass-shadow-hover:0 14px 44px rgba(110,130,165,0.24), inset 0 1px 0 rgba(255,255,255,0.7);
@@ -66,13 +66,12 @@
 
 [data-theme="dark"]{
   --ink:#0b111a;
-  --glass:rgba(25, 35, 50, 0.65); /* Darker glass for contrast */
+  --glass:rgba(25, 35, 50, 0.65);
   --surface:rgba(40, 55, 75, 0.55);
   --rim:rgba(255,255,255,0.15);
   --rim2:rgba(255,255,255,0.22);
   --frost:rgba(255,255,255,0.06);
 
-  /* Brighter text colors to fix blending */
   --text:#ffffff;
   --text2:#cbd5e1;
   --text3:#94a3b8;
@@ -82,7 +81,6 @@
   --glow-accent:rgba(96,165,250,0.18);
   --glow-cyan:rgba(56,189,248,0.14);
 
-  /* Brighter functional colors for dark mode */
   --green: #34d399; 
   --green-dim: rgba(52,211,153,0.12);
   --red: #fb7185;
@@ -138,7 +136,6 @@ body{
     linear-gradient(160deg, #0a1018 0%, #0e1726 55%, #101b2c 100%);
 }
 
-/* Ambient background radial */
 body::before{
   content:'';
   position:fixed;
@@ -158,7 +155,6 @@ body::before{
     radial-gradient(ellipse 80% 40% at 50% 100%,rgba(31,184,138,0.04),transparent);
 }
 
-/* Subtle noise texture overlay */
 body::after{
   content:'';
   position:fixed;
@@ -184,19 +180,17 @@ body::after{
 }
 
 /* ═══════════════════════════════════════════════════════
-   HEADER
+   HEADER & NAVIGATION
 ═══════════════════════════════════════════════════════ */
 header{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:18px 22px;
+  padding:12px 20px; /* Reduced vertical padding */
   margin-top:18px;
   margin-bottom:18px;
   gap:16px;
-  flex-wrap:wrap;
   animation:headerIn .6s var(--ease) both;
-
   background:var(--glass);
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);
   backdrop-filter:blur(var(--glass-blur)) saturate(160%);
@@ -204,7 +198,7 @@ header{
   border-radius:var(--r3);
   box-shadow:var(--glass-shadow);
   position:relative;
-  overflow:hidden;
+  overflow:visible; /* Allowed for dropdowns inside */
 }
 header::before{
   content:'';
@@ -219,7 +213,7 @@ header::before{
   to{opacity:1;transform:translateY(0);}
 }
 
-.logo{display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
+.logo{display:flex;align-items:center;gap:12px;position:relative;z-index:1; flex-shrink: 0;}
 .logo-icon{
   width:42px;height:42px;
   background:linear-gradient(145deg,rgba(255,255,255,0.9),rgba(255,255,255,0.25));
@@ -257,10 +251,39 @@ header::before{
   margin-top:-1px;
 }
 
-.nav-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1;}
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:8px; /* Tighter gap */
+  position:relative;
+  z-index:1;
+  flex-shrink: 0;
+}
+
+/* Responsive header stacking */
+@media(max-width:900px){
+  header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .header-center {
+    order: 3;
+    width: 100%;
+    margin-top: 8px;
+  }
+}
 
 /* ═══════════════════════════════════════════════════════
-   BUTTONS
+   BUTTONS & ICONS
 ═══════════════════════════════════════════════════════ */
 .btn{
   position:relative;
@@ -278,6 +301,9 @@ header::before{
   white-space:nowrap;
   overflow:hidden;
   box-shadow:0 2px 8px rgba(120,140,170,0.12), inset 0 1px 0 rgba(255,255,255,0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 [data-theme="dark"] .btn{
   background:rgba(40, 55, 80, 0.6);
@@ -320,6 +346,14 @@ header::before{
   transform:translateY(-2px);
 }
 
+.btn-icon {
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Circular overrides */
+  font-size: 14px;
+}
+
 .btn .ripple{
   position:absolute;
   border-radius:50%;
@@ -336,13 +370,13 @@ header::before{
 }
 
 /* ═══════════════════════════════════════════════════════
-   STATUS
+   STATUS PILL (COMPACT)
 ═══════════════════════════════════════════════════════ */
 .status-pill{
   display:flex;
   align-items:center;
   gap:6px;
-  padding:6px 12px;
+  padding:6px 10px;
   border-radius:999px;
   background:var(--green-dim);
   border:1px solid rgba(var(--green-rgb),0.25);
@@ -364,29 +398,35 @@ header::before{
 }
 .status-text{
   font-family:var(--mono);
-  font-size:9px;
+  font-size:8px; /* reduced */
   font-weight:600;
   color:var(--green);
   letter-spacing:0.06em;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════
-   TABS
+   TABS (Relocated into header)
 ═══════════════════════════════════════════════════════ */
 .tabs{
   display:flex;
   gap:2px;
-  margin-bottom:18px;
-  padding:6px;
-  background:var(--glass);
-  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);
-  backdrop-filter:blur(var(--glass-blur)) saturate(160%);
+  padding:4px;
+  background:rgba(255,255,255,0.25);
   border:1px solid var(--glass-border);
   border-radius:999px;
-  box-shadow:var(--glass-shadow);
   position:relative;
   animation:tabsIn .5s var(--ease) .15s both;
   width:fit-content;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+[data-theme="dark"] .tabs{
+  background:rgba(0,0,0,0.15);
+  border-color: rgba(255,255,255,0.06);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 @keyframes tabsIn{
   from{opacity:0;transform:translateY(-8px);}
@@ -395,7 +435,7 @@ header::before{
 
 .tab-slider{
   position:absolute;
-  top:6px;bottom:6px;
+  top:4px;bottom:4px;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
   border-radius:999px;
   transition:left .3s var(--ease),width .3s var(--ease);
@@ -407,7 +447,7 @@ header::before{
 }
 .tab{
   position:relative;z-index:1;
-  padding:10px 22px;
+  padding:8px 16px;
   cursor:pointer;
   font-family:var(--mono);
   font-size:10px;
@@ -954,7 +994,6 @@ select option{
 }
 .hm-cell-empty{background:transparent;}
 .hm-cell-none{background:var(--surface);color:var(--text3);}
-/* Using RGB variables ensures these automatically adapt to dark mode safely */
 .hm-cell-large-gain{background:rgba(var(--green-rgb),0.85);color:#fff;}
 .hm-cell-small-gain{background:rgba(var(--green-rgb),0.32);color:var(--green);}
 .hm-cell-breakeven{background:rgba(var(--gold-rgb),0.32);color:var(--gold);}
@@ -1196,17 +1235,29 @@ canvas{display:block;}
     <div class="logo-icon">💠</div>
     <div>
       <div class="logo-name">Lucid</div>
-      <div class="logo-sub">Personal Trading Journal</div>
+      <div class="logo-sub">Trading Journal</div>
     </div>
   </div>
+  
+  <div class="header-center">
+    <div class="tabs" id="tabBar">
+      <div class="tab-slider" id="tabSlider"></div>
+      <div class="tab active" data-tab="overview"  onclick="switchTab('overview')">OVERVIEW</div>
+      <div class="tab"        data-tab="analytics" onclick="switchTab('analytics')">ANALYTICS</div>
+      <div class="tab"        data-tab="calendar"  onclick="switchTab('calendar')">CALENDAR</div>
+      <div class="tab"        data-tab="calculators" onclick="switchTab('calculators')">TOOLS</div>
+      <div class="tab"        data-tab="history"   onclick="switchTab('history')">HISTORY</div>
+    </div>
+  </div>
+
   <div class="nav-right">
-    <div class="status-pill">
+    <div class="status-pill" title="System Status">
       <div class="status-dot"></div>
       <span class="status-text" id="lastUpdated">Loading…</span>
     </div>
-    <button class="btn" onclick="toggleTheme()" title="Toggle theme">🌓 THEME</button>
-    <button class="btn" onclick="openAddModal()">+ ADD TRADE</button>
-    <button class="btn btn-accent" onclick="loadData()">⟳ REFRESH</button>
+    <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
+    <button class="btn btn-icon" onclick="openAddModal()" title="Add Trade">➕</button>
+    <button class="btn btn-accent btn-icon" onclick="loadData()" title="Refresh Data">⟳</button>
   </div>
 </header>
 
@@ -1214,15 +1265,6 @@ canvas{display:block;}
 <div class="alert-banner" id="streakAlert">
   <span class="alert-icon">⚡</span>
   <span id="streakAlertMsg"></span>
-</div>
-
-<div class="tabs" id="tabBar">
-  <div class="tab-slider" id="tabSlider"></div>
-  <div class="tab active" data-tab="overview"  onclick="switchTab('overview')">OVERVIEW</div>
-  <div class="tab"        data-tab="analytics" onclick="switchTab('analytics')">DEEP ANALYTICS</div>
-  <div class="tab"        data-tab="calendar"  onclick="switchTab('calendar')">P&L CALENDAR</div>
-  <div class="tab"        data-tab="calculators" onclick="switchTab('calculators')">CALCULATORS</div>
-  <div class="tab"        data-tab="history"   onclick="switchTab('history')">TRADE HISTORY</div>
 </div>
 
 <div class="tab-panel active" id="tab-overview">
@@ -1626,7 +1668,6 @@ function formatDateForSheet(dateString) {
   return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
 
-// Helper to convert Sheet MM/DD/YYYY to HTML YYYY-MM-DD for editing
 // Helper to convert Sheet MM/DD/YYYY to HTML YYYY-MM-DD for editing
 function parseDateForInput(dateString) {
   if (!dateString) return "";
