@@ -1623,11 +1623,18 @@ function formatDateForSheet(dateString) {
 }
 
 // Helper to convert Sheet MM/DD/YYYY to HTML YYYY-MM-DD for editing
+// Helper to convert Sheet MM/DD/YYYY to HTML YYYY-MM-DD for editing
 function parseDateForInput(dateString) {
   if (!dateString) return "";
   const d = new Date(dateString);
   if (isNaN(d)) return "";
-  return d.toISOString().split('T')[0];
+  
+  // Use local time instead of .toISOString() to prevent timezone shifting
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  
+  return `${year}-${month}-${day}`;
 }
 
 function openAddModal() {
